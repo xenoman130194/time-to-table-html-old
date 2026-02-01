@@ -419,7 +419,7 @@
 
     <div class="setup-grid">
         <div class="input-group" style="grid-column: span 2;">
-            <label>Техкарта (Шаблон)</label>
+            <label for="techCardSelect">Техкарта (Шаблон)</label>
             <div style="display:flex; gap:5px;">
                 <select id="techCardSelect" style="flex-grow:1;">
                     <option value="manual">-- Ручной ввод --</option>
@@ -429,11 +429,11 @@
                 <button class="btn-sm" style="background:#ef4444" id="deleteCardBtn">✖</button>
             </div>
         </div>
-        <div class="input-group"><label>Дата Начала</label><input type="date" id="startDate"></div>
-        <div class="input-group"><label>Время Начала</label><input type="time" id="startTime" step="1" value="08:00:00"></div>
+        <div class="input-group"><label for="startDate">Дата Начала</label><input type="date" id="startDate"></div>
+        <div class="input-group"><label for="startTime">Время Начала</label><input type="time" id="startTime" step="1" value="08:00:00"></div>
         
         <div class="input-group">
-            <label>Режим</label>
+            <label for="chainMode">Режим</label>
             <div class="checkbox-group">
                 <input type="checkbox" id="chainMode" checked>
                 <label for="chainMode">Цепочка</label>
@@ -442,38 +442,38 @@
 
         <div class="input-group" style="grid-column: span 2; display: flex; flex-direction: row; gap: 10px;">
             <div style="flex: 1.5; display: flex; flex-direction: column;">
-                <label>Обед 1 (12:00)</label>
+                <label for="lunchStart">Обед 1 (12:00)</label>
                 <input type="time" id="lunchStart" value="12:00">
             </div>
             <div style="flex: 1.5; display: flex; flex-direction: column;">
-                <label>Обед 2 (00:00)</label>
+                <label for="lunchStart2">Обед 2 (00:00)</label>
                 <input type="time" id="lunchStart2" value="00:00">
             </div>
             <div style="flex: 1; display: flex; flex-direction: column;">
-                <label>Обед (мин)</label>
+                <label for="lunchDur">Обед (мин)</label>
                 <input type="number" id="lunchDur" value="45" min="0" max="480" step="5">
             </div>
         </div>
 
-        <div class="input-group"><label>Кол-во операций</label><input type="number" id="totalOps" min="1" max="50" value="1"></div>
-        <div class="input-group"><label>исполнителей</label><input type="number" id="workerCount" min="1" max="20" value="1"></div>
+        <div class="input-group"><label for="totalOps">Кол-во операций</label><input type="number" id="totalOps" min="1" max="50" value="1"></div>
+        <div class="input-group"><label for="workerCount">исполнителей</label><input type="number" id="workerCount" min="1" max="20" value="1"></div>
         
         <div class="input-group">
-            <label>Тип задания времени</label>
+            <label for="timeMode">Тип задания времени</label>
             <select id="timeMode">
                 <option value="per_worker">На каждого</option>
                 <option value="total" selected>Общее</option>
             </select>
         </div>
         
-        <div class="input-group"><label>Rиз (Мом)</label><input type="text" id="resIz" placeholder="..."></div>
-        <div class="input-group"><label>Коэф. K</label><input type="text" id="coefK" placeholder="..."></div>
+        <div class="input-group"><label for="resIz">Rиз (Мом)</label><input type="text" id="resIz" placeholder="..."></div>
+        <div class="input-group"><label for="coefK">Коэф. K</label><input type="text" id="coefK" placeholder="..."></div>
     </div>
 
     <div class="text-fields-row">
-        <div class="input-group" style="flex: 1;"><label>Состояние до ремонта (п.1)</label><input type="text" id="statusBefore" value="замечаний нет"></div>
-        <div class="input-group" style="flex: 1;"><label>Доп. работы (п.3)</label><input type="text" id="workExtra" value="нет"></div>
-        <div class="input-group" style="flex: 1;"><label>Рекомендации (п.5)</label><input type="text" id="devRec" value="нет"></div>
+        <div class="input-group" style="flex: 1;"><label for="statusBefore">Состояние до ремонта (п.1)</label><input type="text" id="statusBefore" value="замечаний нет"></div>
+        <div class="input-group" style="flex: 1;"><label for="workExtra">Доп. работы (п.3)</label><input type="text" id="workExtra" value="нет"></div>
+        <div class="input-group" style="flex: 1;"><label for="devRec">Рекомендации (п.5)</label><input type="text" id="devRec" value="нет"></div>
     </div>
 
     <div id="fieldsContainer"></div>
@@ -760,6 +760,7 @@
     function createOperationBlock(index) {
         const block = createEl('div', { className: 'op-block' });
         const nameInp = createEl('input', {
+            id: `opName_${index}`,
             className: 'op-header-input',
             value: `Операция №${index}`,
             type: 'text',
@@ -770,8 +771,9 @@
         
         // Блок времени работы
         const workGroup = createEl('div', { className: 'time-group' });
-        workGroup.append(createEl('label', {}, 'Время:'));
+        workGroup.append(createEl('label', { for: `opDuration_${index}` }, 'Время:'));
         const workInput = createEl('input', {
+            id: `opDuration_${index}`,
             type: 'number',
             className: 'op-duration',
             step: '1',
@@ -787,6 +789,7 @@
         });
         workGroup.append(workInput);
         const workUnit = createEl('select', {
+            id: `opUnit_${index}`,
             className: 'op-unit',
             style: 'width:70px; background:transparent; border:none;'
         });
@@ -798,8 +801,9 @@
         
         // Блок паузы между заказами (только для первой операции)
         const breakGroup = createEl('div', { className: 'time-group break-container' });
-        breakGroup.append(createEl('label', {}, 'Пауза:'));
+        breakGroup.append(createEl('label', { for: `opBreakVal_${index}` }, 'Пауза:'));
         const breakInput = createEl('input', {
+            id: `opBreakVal_${index}`,
             type: 'number',
             className: 'op-break-val',
             value: '0',
@@ -815,6 +819,7 @@
         });
         breakGroup.append(breakInput);
         const breakUnit = createEl('select', {
+            id: `opBreakUnit_${index}`,
             className: 'op-break-unit',
             style: 'width:70px; background:transparent; border:none;'
         });
@@ -827,11 +832,12 @@
         // Чекбокс для паузы между заказами
         const toggleDiv = createEl('div', { style: 'display:flex; align-items:center;' });
         const chk = createEl('input', {
+            id: `orderPause_${index}`,
             type: 'checkbox',
             className: 'order-pause-toggle',
             style: 'margin:0;'
         });
-        toggleDiv.append(chk, createEl('label', { style: 'margin-left:4px; cursor:pointer;' }, 'Пауза перед началом (перерыв)'));
+        toggleDiv.append(chk, createEl('label', { for: `orderPause_${index}`, style: 'margin-left:4px; cursor:pointer;' }, 'Пауза перед началом (перерыв)'));
         
         // Скрыть паузу для всех блоков кроме первого
         if (index !== 1) {
@@ -844,10 +850,6 @@
         };
         
         chk.addEventListener('change', updateBreakVis);
-        toggleDiv.querySelector('label').addEventListener('click', () => {
-            chk.checked = !chk.checked;
-            updateBreakVis();
-        });
         
         controls.append(toggleDiv, breakGroup, workGroup);
         block.append(nameInp, controls);
